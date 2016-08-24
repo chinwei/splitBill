@@ -16,7 +16,19 @@ import {
 } from 'react-native';
 
 class splitBill extends Component{
+
+  constructor(props) {
+    super(props);
+
+    var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+    this.state = {
+      dataSource: ds.cloneWithRows(['dfsf','sdfds'])
+    }
+
+  }
+
   render() {
+
     return (
       <NavigatorIOS
         style={{flex: 1, backgroundColor: '#f3ffff'}}
@@ -51,7 +63,7 @@ class Home extends Component {
     return (
       <View style={{flex: 1, backgroundColor: '#fc0', paddingTop: 100}}>
 
-        <Tab/>
+
 
         <TouchableHighlight onPress={() => this.onPress()}>
             <Text>Click me!!!</Text>
@@ -70,13 +82,12 @@ class AddItems extends Component {
     super(props);
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
-    console.log(ds);
+    this.newData = [];
 
 
     this.state = {
       receiptValue: '',
-      newData: ['new array!', 'another entry', 'sdfdf'],
-      dataSource: ds.cloneWithRows(['1','dfs'])
+      dataSource: ds.cloneWithRows([])
     }
   }
 
@@ -87,13 +98,15 @@ class AddItems extends Component {
 
     // console.log(this.state.dataSource);
     // this.state.dataSource.concat(['lala']);
-    console.log(this.state.dataSource);
 
 
 
+    this.newData.push(this.state.receiptValue);
+
+    console.log(this.newData);
     this.setState({
-      newData: this.state.newData.concat(['lalala']),
-      dataSource: this.state.dataSource.cloneWithRows(this.state.newData),
+      receiptValue: '',
+      dataSource: this.state.dataSource.cloneWithRows(this.newData),
 
     })
   }
@@ -114,23 +127,75 @@ class AddItems extends Component {
     })
   }
 
+  componentDidMount() {
+    var listViewScrollView = this.refs.listView.getScrollResponder();
+    listViewScrollView.scrollTo(1); // Hack to get ListView to render fully
+  }
+
   render() {
     return (
-      <View style={{flex: 1, backgroundColor: '#0cf', paddingTop: 64}}>
-        <View style={{height: 80, backgroundColor: '#494D4D', paddingBottom: 5, paddingRight: 5, paddingLeft: 5, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end'}}>
-            <Text style={{fontSize: 12, color: '#7C8282'}}>Total amount</Text>
-            <Text style={{fontSize: 24, color: '#F3FFFF'}}>{String(this.state.receiptValue)}</Text>
-        </View>
+      <View style={{flex: 1, backgroundColor: '#F3FFFF', paddingTop: 64}}>
 
-        <ListView
+        <View style={{backgroundColor: '#494D4D', height: 30, zIndex: 2, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end'}}>
+                <Text style={{fontSize: 24, color: '#F3FFFF'}}>${String(this.state.receiptValue)}</Text>
+            </View>
+
+        <ListView style={{marginTop: -64, zIndex: 1}}
+        ref='listView'
         dataSource={this.state.dataSource}
-        renderRow={(rowData) => <Text>{rowData}</Text>}
+        renderRow={(rowData) =>
+          <View style={{
+              height: 50,
+              flexDirection: 'row',
+              alignItems: 'center',
+              borderBottomWidth: 1,
+              borderBottomColor: '#eee'
+            }}>
+            <View style={{flexDirection: 'row', flex: 1}}>
+              <View style={{paddingLeft: 5, height: 50, flexDirection: 'row', alignItems: 'center', flex: 1}}>
+                <Text style={{fontSize: 18}}>{'$'+rowData}</Text>
+              </View>
+              <View style={{padding: 3, flexDirection: 'row', height: 50, alignItems: 'center', justifyContent: 'space-between', flex: 3}}>
+                <TouchableHighlight style={{height: 40, width: 40, borderRadius: 20, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', backgroundColor: '#f3ffff'}}>
+                  <Text>1</Text>
+                </TouchableHighlight>
+                <TouchableHighlight style={{height: 40, width: 40, borderRadius: 20, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', backgroundColor: '#f3ffff'}}>
+                  <Text>2</Text>
+                </TouchableHighlight>
+                <TouchableHighlight style={{height: 40, width: 40, borderRadius: 20, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', backgroundColor: '#f3ffff'}}>
+                  <Text>3</Text>
+                </TouchableHighlight>
+                <TouchableHighlight style={{height: 40, width: 40, borderRadius: 20, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', backgroundColor: '#f3ffff'}}>
+                  <Text>4</Text>
+                </TouchableHighlight>
+                <TouchableHighlight style={{height: 40, width: 40, borderRadius: 20, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', backgroundColor: '#f3ffff'}}>
+                  <Text>5</Text>
+                </TouchableHighlight>
+                <TouchableHighlight style={{height: 40, width: 40, borderRadius: 20, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', backgroundColor: '#f3ffff'}}>
+                  <Text>6</Text>
+                </TouchableHighlight>
+
+
+
+              </View>
+            </View>
+          </View>
+        }
       />
-        <TouchableHighlight onPress={() => this._handleAdd()}>
-            <Text>Click me!!!</Text>
+
+
+
+
+
+
+
+
+
+    <TouchableHighlight style={{backgroundColor: '#25BFE9', height: 40, alignItems: 'center', flexDirection: 'row', justifyContent: 'center'}} onPress={() => this._handleAdd()}>
+            <Text style={{color: 'white'}}>Add items</Text>
         </TouchableHighlight>
 
-        <View style={{flex: 1}}>
+        <View style={{height: 250}}>
               <View style={{flex: 1, flexDirection: 'row'}}>
                   <NumPadKey text="1" appendNumber={() => this.appendNumber('1')}/>
                   <NumPadKey text="2" appendNumber={() => this.appendNumber('2')}/>
@@ -254,7 +319,7 @@ onPressIn() {
      this.state.fontSizeAnim,    // The value to drive
      {
         toValue: 28,
-        duration: 200,
+        duration: 0,
         easing: Easing.elastic(1)
    }).start();
 
@@ -262,7 +327,7 @@ onPressIn() {
       this.state.fontPos,    // The value to drive
       {
          toValue: 20,
-         duration: 200,
+         duration: 0,
          easing: Easing.elastic(1)
     }).start();
    }
@@ -306,53 +371,3 @@ onPressOut() {
 
 
 AppRegistry.registerComponent('splitBill', () => splitBill);
-
-
-
-
-
-
-
-
-
-
-
-
-// class First extends Component{
-//
-//   navSecond(){
-//     console.log(this);
-//     this.props.navigator.push({
-//         title: 'second',
-//         component: Second
-//     })
-//
-//   }
-//   render() {
-//     return (
-//       <View style={{paddingTop: 100}}>
-//         <TouchableHighlight onPress={() => this.navSecond()}>
-//           <Text>Navigate to second sjcreen</Text>
-//         </TouchableHighlight>
-//       </View>
-//     );
-//   }
-// }
-//   class Second extends Component{
-//   render() {
-//     return (
-//       <View style={styles.container}>
-//         <Text>
-//           Second screen
-//         </Text>
-//       </View>
-//     );
-//   }
-// };
-//
-// const styles = {
-//   container: {
-//     flex: 1,
-//     backgroundColor: 'red'
-//   }
-// }
