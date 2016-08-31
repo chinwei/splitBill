@@ -83,7 +83,7 @@ class AddItems extends Component {
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
     this.newData = [];
-
+    this.person1 = [];
 
     this.state = {
       receiptValue: '',
@@ -102,6 +102,7 @@ class AddItems extends Component {
 
 
     this.newData.push(this.state.receiptValue);
+
 
     console.log(this.newData);
     this.setState({
@@ -132,6 +133,10 @@ class AddItems extends Component {
     listViewScrollView.scrollTo(1); // Hack to get ListView to render fully
   }
 
+  computePrice() {
+    alert ('compute!')
+  }
+
   render() {
     return (
       <View style={{flex: 1, backgroundColor: '#F3FFFF', paddingTop: 64}}>
@@ -155,29 +160,8 @@ class AddItems extends Component {
               <View style={{paddingLeft: 5, height: 50, flexDirection: 'row', alignItems: 'center', flex: 1}}>
                 <Text style={{fontSize: 18}}>{'$'+rowData}</Text>
               </View>
-              <View style={{padding: 3, flexDirection: 'row', height: 50, alignItems: 'center', justifyContent: 'space-between', flex: 3}}>
-                <TouchableHighlight style={{height: 40, width: 40, borderRadius: 20, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', backgroundColor: '#f3ffff'}}>
-                  <Text>1</Text>
-                </TouchableHighlight>
-                <TouchableHighlight style={{height: 40, width: 40, borderRadius: 20, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', backgroundColor: '#f3ffff'}}>
-                  <Text>2</Text>
-                </TouchableHighlight>
-                <TouchableHighlight style={{height: 40, width: 40, borderRadius: 20, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', backgroundColor: '#f3ffff'}}>
-                  <Text>3</Text>
-                </TouchableHighlight>
-                <TouchableHighlight style={{height: 40, width: 40, borderRadius: 20, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', backgroundColor: '#f3ffff'}}>
-                  <Text>4</Text>
-                </TouchableHighlight>
-                <TouchableHighlight style={{height: 40, width: 40, borderRadius: 20, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', backgroundColor: '#f3ffff'}}>
-                  <Text>5</Text>
-                </TouchableHighlight>
-                <TouchableHighlight style={{height: 40, width: 40, borderRadius: 20, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', backgroundColor: '#f3ffff'}}>
-                  <Text>6</Text>
-                </TouchableHighlight>
+              <Checkboxes/>
 
-
-
-              </View>
             </View>
           </View>
         }
@@ -222,6 +206,72 @@ class AddItems extends Component {
     )
   }
 }
+
+
+
+class Checkboxes extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      checkArray: [false, false, false, false, false, false]
+    }
+  }
+
+  checkItem(index) {
+    console.log(this.state.checkArray);
+    this.state.checkArray[index] = !this.state.checkArray[index];
+
+
+    this.setState({
+      checkArray: this.state.checkArray
+    })
+
+  }
+
+
+  render() {
+    return (
+      <View style={{padding: 3, flexDirection: 'row', height: 50, alignItems: 'center', justifyContent: 'space-between', flex: 3}}>
+        <TouchableHighlight
+            onPress={() => this.checkItem(0)}
+            style={{height: 40, width: 40, borderRadius: 20, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', backgroundColor: this.state.checkArray[0] == true ? '#f3ff3f' : '#fc0'}}>
+          <Text>1</Text>
+        </TouchableHighlight>
+        <TouchableHighlight
+            onPress={() => this.checkItem(1)}
+            style={{height: 40, width: 40, borderRadius: 20, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', backgroundColor: this.state.checkArray[1] == true ? '#f3ff3f' : '#fc0'}}>
+          <Text>2</Text>
+        </TouchableHighlight>
+        <TouchableHighlight
+            onPress={() => this.checkItem(2)}
+            style={{height: 40, width: 40, borderRadius: 20, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', backgroundColor: this.state.checkArray[2] == true ? '#f3ff3f' : '#fc0'}}>
+          <Text>3</Text>
+        </TouchableHighlight>
+        <TouchableHighlight
+            onPress={() => this.checkItem(3)}
+            style={{height: 40, width: 40, borderRadius: 20, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', backgroundColor: this.state.checkArray[3] == true ? '#f3ff3f' : '#fc0'}}>
+          <Text>4</Text>
+        </TouchableHighlight>
+        <TouchableHighlight
+            onPress={() => this.checkItem(4)}
+            style={{height: 40, width: 40, borderRadius: 20, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', backgroundColor: this.state.checkArray[4] == true ? '#f3ff3f' : '#fc0'}}>
+          <Text>5</Text>
+        </TouchableHighlight>
+        <TouchableHighlight
+            onPress={() => this.checkItem(5)}
+            style={{height: 40, width: 40, borderRadius: 20, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', backgroundColor: this.state.checkArray[5] == true ? '#f3ff3f' : '#fc0'}}>
+          <Text>6</Text>
+        </TouchableHighlight>
+
+
+
+      </View>
+
+    )
+  }
+}
+
+
 
 
 class Tab extends Component {
