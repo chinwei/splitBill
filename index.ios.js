@@ -20,9 +20,11 @@ class splitBill extends Component{
   constructor(props) {
     super(props);
 
+
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     this.state = {
       dataSource: ds.cloneWithRows(['dfsf','sdfds'])
+
     }
 
   }
@@ -87,7 +89,14 @@ class AddItems extends Component {
 
     this.state = {
       receiptValue: '',
-      dataSource: ds.cloneWithRows([])
+      dataSource: ds.cloneWithRows([]),
+      rowValue:
+      [
+        {
+      		'price': '125',
+      		'checkboxState': [true, false, false, false, false, false]
+      	}
+      ]
     }
   }
 
@@ -137,6 +146,10 @@ class AddItems extends Component {
     alert ('compute!')
   }
 
+  changeSelection() {
+    console.log(this.state.rowValue);
+  }
+
   render() {
     return (
       <View style={{flex: 1, backgroundColor: '#F3FFFF', paddingTop: 64}}>
@@ -160,7 +173,7 @@ class AddItems extends Component {
               <View style={{paddingLeft: 5, height: 50, flexDirection: 'row', alignItems: 'center', flex: 1}}>
                 <Text style={{fontSize: 18}}>{'$'+rowData}</Text>
               </View>
-              <Checkboxes/>
+              <Checkboxes changeSelection={this.changeSelection}/>
 
             </View>
           </View>
@@ -220,7 +233,7 @@ class Checkboxes extends Component {
   checkItem(index) {
     console.log(this.state.checkArray);
     this.state.checkArray[index] = !this.state.checkArray[index];
-
+    this.props.changeSelection();
 
     this.setState({
       checkArray: this.state.checkArray
